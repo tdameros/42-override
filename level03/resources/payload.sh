@@ -1,0 +1,1 @@
+(python -c  'print("322424827")'; echo "cat /home/users/level04/.pass") | ./level03
