@@ -1,0 +1,2 @@
+Modification de la GOT d'exit pour jump sur un shellcode qui se trouve dans les variables d'env (SHELLCODE).
+Attention, on doit utiliser 2 %n car il n'a pas assez de place dans le buffer (100 bytes max)
