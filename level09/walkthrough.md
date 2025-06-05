@@ -1,0 +1,2 @@
+Le programme appelle 2 fonctions a le suite nous demandant des inputs. on se rend compte que dans le username, on copie 41 octets, il est donc possible de modifier la valeur de v7 qui est aussi la valeur donnee au strncpy de set_msg.
+On peut donc strcpy jusqu'a 255 caracteres, ce qui nous permet de changer l'EIP pour jump sur la fonction secret_backdoor.
