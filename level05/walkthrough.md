@@ -110,7 +110,7 @@ SHELLCODE will be at 0xffffd8d5
 
 `0xffffd8d5 => 4294957269`
 
-Comme l'adresse est tres très grande, nous allons l'écrire en utilisant deux `%n` en écrivant 4 bytes puis 4 autre bytes.
+Comme l'adresse est tres très grande, nous allons l'écrire en utilisant deux `%n` en écrivant 2 bytes puis 2 autre bytes.
 
 
 La premier valeur à stocker est `0xd8d5 = 55509` (comme nous sommes en little endian)
