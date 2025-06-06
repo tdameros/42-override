@@ -1,4 +1,4 @@
-# Walkthrough - level05
+# Walkthrough - level04
 
 The program has SUID permissions from the user `level05`, which will allow us to obtain their flag.
 
