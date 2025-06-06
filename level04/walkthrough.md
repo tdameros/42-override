@@ -2,21 +2,20 @@
 
 The program has SUID permissions from the user `level05`, which will allow us to obtain their flag.
 
-# Dissassembly
+## Disassembly
 
-- Presence d'un fork qui execute un `gets` pour le mettre dans une variable s
-- Pas de possibilite d'executer un shellcode car le fork ne nous laisse pas la main sur le stdin
-- Le parent commence par wait son child et le kill en cas de probleme durant son execution
+- Presence of a fork that executes a `gets` to store it in variable s
+- No possibility of executing shellcode as the fork doesn't give us control of stdin
+- Parent process waits for child and kills it in case of problems during execution
 
-# Exploit
+## Exploit
 
-L'idee ici est de reecrire l'EIP du main dans le child afin qu'elle execute la fonction `system` de la libc. Pour cela on doit suivre le schema suivant :
+The idea here is to rewrite the EIP of the main function in the child to execute the `system` function from libc. To do this, we must follow the following scheme:
 
 ![Read to libc](resources/read_to_libc.png)
 
-Il nous faut donc trouver les addresses des fonctions `system` et `exit` dans la libc.
+We found the addresses of the functions `system` and `exit` in the libc:
 
-Pour cela, dans gdb :
 ```bash
 (gdb) b main
 (gdb) run
@@ -26,9 +25,10 @@ $1 = {<text variable, no debug info>} 0xf7e6aed0 <system>
 $2 = {<text variable, no debug info>} 0xf7e5eb70 <exit>
 ```
 
-On doit egalement trouver la valeur de l'offset pour reecrire l'EIP. Le buffer overflow pattern generator nous donne `156`.
+We also found the offset value of `156` using the buffer overflow pattern generator.
 
-Il nous reste a stocker la commande dans les variables d'environnement et recuperer son addresse. Pour cela, il ne faut pas oublier d'unset les variables `COLUMNS` et `LINES` de gdb. On peut ensuite recuperer les addresses :
+To store the command in environment variables and retrieve its address, we must not forget to unset the `COLUMNS` and `LINES` variables in gdb. We can then retrieve the addresses:
+
 ```bash
 (gdb) unset env LINES
 (gdb) unset env COLUMNS
@@ -37,6 +37,6 @@ Il nous reste a stocker la commande dans les variables d'environnement et recupe
 (gdb) x/500s
 ```
 
-On recupere ainsi l'addresse de notre variable d'environnement (attention, le nom de la variable est egalement stocke a cet endroit, il faut bine recuperer l'addresse de la valeur de la variable d'environnement).
+We thus obtain the address of our environment variable (carefully noting that the variable name is also stored at this location, we must properly retrieve the address of the environment variable's value).
 
-Source des explications de read_to_libc : https://www.ired.team/offensive-security/code-injection-process-injection/binary-exploitation/return-to-libc-ret2libc#finding-system
+Source of ret2libc explanations: https://www.ired.team/offensive-security/code-injection-process-injection/binary-exploitation/return-to-libc-ret2libc#finding-system

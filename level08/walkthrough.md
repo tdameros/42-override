@@ -1,38 +1,38 @@
-# Walkthrough - level08
+# Walkthrough - Level 08
 
 The program has SUID permissions from the user `level09`, which will allow us to obtain their flag.
 
-# Dissassembly
+# Disassembly
 
-- Le main ouvre un fichier dans le dossier backup dans lequel il va ecrire ses logs
-- Le main ouvre egalement le fichier qu'on lui donne en argument
-- Il va ensuite ouvrir un dernier fichier dans lequel il va tenter d'ecrire ce qu'il a lu dans le fichier donne en argument
+- Main opens a file in the backup directory to write its logs
+- Main also opens the file given as an argument
+- It then opens a final file where it attempts to write what it read from the argument file
 
 # Exploit
 
-L'idee ici est de lui donner en argument le fichier `/home/users/level09/end` pour qu'il puisse le lire. on souhaite ensuite exploiter le fait qu'il ne lise que 89 caracteres de notre argument pour definir le fichier dans lequel il va ecrire pour qu'il ecrive dans un fichier dans lequel il a les droits.
+The idea here is to give it `/home/users/level09/end` as an argument so it can read it. We want to exploit the fact that it only reads 89 characters of our argument to define the file in which it will write, so it writes to a file where it has permissions.
 
-On note 2 choses qui nous simplifient la vie pour le chemin qu'on va choisir.
-- D'abord, `tmp///////////passwd` est interprete de la meme maniere que `tmp/passwd`
-- De plus, lorsqu'on cherche a remonter avec `../` depuis la racine, il n'y a pas d'erreur, on reste simplement a la racine.
+We note two things that make our path choice easier:
+- First, `tmp///////////passwd` is interpreted the same way as `tmp/passwd`
+- Additionally, when trying to go up with `../` from the root, there is no error, we simply stay at the root
 
-Nous avons donc 2 conditions:
-- Le chemin donne en argument doit mener au fichier `/home/users/level09/end`
-- Le chemin `./backup/` auquel on concatene les 89 premiers caracteres de notre argument doit mener a un fichier dans lequel on peut ecrire.
+We have two conditions:
+- The path given as an argument must lead to `/home/users/level09/end`
+- The path `./backup/` concatenated with the first 89 characters of our argument must lead to a file we can write to
 
-Pour cela on va commencer par creer un dossier `password` dans `/tmp` :
+To do this, we first create a `password` directory in `/tmp`:
 ```bash
 ~$ mkdir /tmp/password
 ```
 
-On peut alors faire en sorte que le 89eme caractere de notre argument tombe au milieu de `password` :
+We can then make the 89th character of our argument fall in the middle of `password`:
 ```bash
 /level08 "../../../../tmp//////////////////////////////////////////////////////////////////////pass"
 ```
 
-Il nous reste alors a completer ce chemin pour qu'il pointe sur `/home/users/level09/end`:
+We then need to complete the path to have it going to `/home/users/level09/end`:
 ```bash
 ./level08 "../../../../tmp//////////////////////////////////////////////////////////////////////password/../../home/users/level09/.pass"
 ```
 
-Le mot de passe se trouve alors dans le fichier `/tmp/pass`.
+The password is now stored in `/tmp/pass`.
