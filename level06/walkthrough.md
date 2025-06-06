@@ -1,8 +1,17 @@
-Il faut un login avec plus de 5 caractères et il faut que les caracteres soient supérieur à la valeur à l'espace dans la table ASCII.
-Ensuite, il y a une fonction qui converti l'identifiant en un nombre `v4` et qui verifie si ce nombre correspond au serial number.
+# Walkthrough - level06
 
-Objectif executer la fonction avec un login valide:
+The program has SUID permissions from the user `level07`, which will allow us to obtain their flag.
 
+# Dissassembly
+
+- Le main execute un shell si auth retourne false
+- La fonction auth qui prend en argument le login et le numero de serie et retourne un booleen
+- Le login entre doit faire au minimum 5 caracteres et doivent etre plus grand que la valeur de l'espace en ASCII
+- La fonction auth execute un certain nombre d'operation sur le login et le compare ua numero de serie
+
+# Exploit
+
+Ici il faut simplement executer la transformation du login faite par la fonction auth pour trouver le numero de serie correspondant. On compile donc notre propre programme qui effectue la meme transformation :
 ```c
 #include <stdio.h>
 
@@ -20,6 +29,4 @@ int	main(void) {
 }
 ```
 
-```bash
-6233273
-```
+Le resultat est donc le numero de serie correspondant au login `ffffffffff`. Il nous suffit alors de rentrer cette combinaison de login et numero de serie dans l'executable et on obtient un shell.
