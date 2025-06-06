@@ -4,19 +4,19 @@ The program contains SUID permissions for the user level04, which will allow us 
 
 ## Disassembly
 
-- `scanf` pour récupérer un mot de passe (nombre entier)
-- Fonction `test` qui appel une fonction `decrypt`
-- Fonction `decrypt` qui applique des opérations xor sur une chaine de caracteres, la compare avec `Congratulations!` et execute un shell
+- `scanf` to retrieve a password (integer)
+- `test` function which calls a `decrypt` function
+- `decrypt` function that applies xor operations on a string, compares it with `Congratulations!`, and executes a shell
 
 ## Exploit
 
-L'objectif est de faire en sorte d'executer le shell qui se trouve dans la fonction `decrypt`. Pour cela, il faut que la chaine de caractères ```Q}|u\`sfg~sf{}|a3``` devienne `Congratulations!` en appliquant un xor sur chacun des caractères.
+The goal is to trigger the shell inside the `decrypt` function. To do this, the string ```Q}|u\`sfg~sf{}|a3``` must become `Congratulations!` by applying xor on each character.
 
-Si on regarde la fonction `test`, on voit une instruction `switch` qui soustrait les deux nombres récupérés et les compare avec différentes valeurs. Si la soustraction est comprise entre 1 et 21 (inclus), alors le résultat de la soustraction est directement passsé en argument de la fonction `decrypt`, sinon un nombre aléatoire est passé en argument.
+In the `test` function, there's a `switch` statement that subtracts two numbers and compares the result with various values. If the subtraction result is between 1 and 21 (inclusive), it is passed directly to the `decrypt` function; otherwise, a random number is used.
 
-Il nous suffit donc de trouver une valeur comprise entre 1 et 21 (x) qui `'Q' ^ x = 'C'`. Il s'agit alors de `18` que nous devons passer en parametre à la fonction `decrypt`.
+So we just need to find a value between 1 and 21 (x) such that `'Q' ^ x = 'C'`. That value is `18`, which must be passed to the `decrypt` function.
 
-Maintenant il nous reste plus qu'à trouver le premier argument de la fonction `test`. Étant donné que le deuxième argument est `322424845`, il faut que la soustraction des deux donne le résultat de `18`.
+Now we just need to find the first argument to the `test` function. Given that the second argument is `322424845`, the subtraction must result in `18`.
 
 ```
 322424845 - x = 18
