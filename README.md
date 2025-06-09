@@ -1,6 +1,6 @@
 # 42 - Override
 
-The **Override** project is part of the 42 School's security curriculum and introduces students to the fundamentals of **binary exploitation**. Through a series of progressively harder challenges, you learn to analyze and manipulate binary executables using techniques such as **disassembly**, **buffer overflows**, **shellcode injection**, **return-to-libc` and **Global Offset Table (GOT) overwriting**.
+The **Override** project is part of the 42 School's security curriculum and introduces students to the fundamentals of **binary exploitation**. Through a series of progressively harder challenges, you learn to analyze and manipulate binary executables using techniques such as **disassembly**, **buffer overflows**, **shellcode injection**, **return-to-libc** and **Global Offset Table (GOT) overwriting**.
 
 ## Objectives
 
