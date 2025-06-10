@@ -25,7 +25,7 @@ $1 = {<text variable, no debug info>} 0xf7e6aed0 <system>
 $2 = {<text variable, no debug info>} 0xf7e5eb70 <exit>
 ```
 
-We also found the offset value of `156` using the buffer overflow pattern generator.
+We also found the offset value of `156` using the buffer overflow pattern generator and GDB (using `set follow-fork-mode child`) 
 
 To store the command in environment variables and retrieve its address, we must not forget to unset the `COLUMNS` and `LINES` variables in gdb. We can then retrieve the addresses:
 
