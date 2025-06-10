@@ -26,16 +26,20 @@ We obtain the following result:
 
 We then need to convert this password to char without forgetting that `%p` has reversed groups of 8 bytes because the system is little-endian, then interpret the values in ASCII to obtain the password.
 
-`0x756e505234376848 = unPR47hH`
-`0x45414a3561733951 = EAJ5as9Q`
-`0x377a7143574e6758 = 7zqCWNgX`
-`0x354a35686e475873 = 5J5hnGXs`
-`0x48336750664b394d = H3gPfK9M`
+```
+0x756e505234376848 = unPR47hH
+0x45414a3561733951 = EAJ5as9Q
+0x377a7143574e6758 = 7zqCWNgX
+0x354a35686e475873 = 5J5hnGXs
+0x48336750664b394d = H3gPfK9M
+```
 
 We then only need to invert each groups:
 
-`unPR47hH => Hh74RPnu`
-`EAJ5as9Q => Q9sa5JAE`
-`7zqCWNgX => XgNWCqz7`
-`5J5hnGXs => sXGnh5J5`
-`H3gPfK9M => M9KfPg3H`
+```
+unPR47hH => Hh74RPnu
+EAJ5as9Q => Q9sa5JAE
+7zqCWNgX => XgNWCqz7
+5J5hnGXs => sXGnh5J5
+H3gPfK9M => M9KfPg3H
+```
